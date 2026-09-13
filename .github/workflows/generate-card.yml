@@ -1,0 +1,33 @@
+name: Generate GitHub dashboard card
+
+on:
+  schedule:
+    - cron: "0 0 * * *" # daily at midnight UTC
+  workflow_dispatch: {}
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate dashboard card
+        uses: shubhamg13/github-dashboard@main
+        with:
+          username: shubhamg13
+          output: card.svg
+          theme: catppuccin
+          count: 5
+
+      - name: Commit the card
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add card.svg
+          git diff --cached --quiet || git commit -m "chore: update dashboard card"
+          git push
