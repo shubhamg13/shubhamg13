@@ -23,6 +23,7 @@ jobs:
           output: card.svg
           theme: catppuccin
           count: 5
+          exclude_own: "true"
 
       - name: Commit the card
         run: |
